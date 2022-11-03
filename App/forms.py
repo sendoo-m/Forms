@@ -1,3 +1,4 @@
+from tkinter import Widget
 from django import forms
 from .models import Candidate
 from django.core.validators import RegexValidator
@@ -33,8 +34,20 @@ class CandidateForm(forms.ModelForm):
         message     ="only number is allowd !")], 
         widget      =forms.TextInput(attrs={'placeholder':'Your age'})
         )
+    
     class Meta:
         model       = Candidate
         fields      = '__all__'
         # fields      = ['firstname','lastname','age','email','message']
         # exclude      = ['firstname','lastname','age','email','message']
+
+        # our widget
+        Widgets = {
+            'phone': forms.TextInput(
+                attrs={
+                'style':'font-size: 13px',
+                'placeholder':'phone',
+                'data-mask':'(000) 0000-0000'
+                }
+            )
+        }
