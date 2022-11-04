@@ -1,14 +1,52 @@
+from email.policy import default
+from random import choices
+from secrets import choice
+from tkinter.messagebox import NO
 from django.db import models
 
 # Create your models here.
+SITUATION   = (
+    ('pending','pending'),
+    ('Approved','Approved'),
+    ('Disapproved','Disapproved')
+)
+PERSONALITY   = (
+    ('','select a personality'),
+    ('I am outgoing','I am outgoing'),
+    ('I am sociable','I am sociable'),
+    ('I am antisocial','I am antisocial'),
+    ('I am disceet','I am disceet'),
+    ('I am serious','I am serious')
+)
+# GENDER   = (
+#     ('Male','Male'),
+#     ('Female','Female')
+# )
+
+SMOKER   = (
+    ('1','Yes'),
+    ('2','No')
+)
 
 class Candidate(models.Model):
     firstname           = models.CharField(max_length=50)
     lastname            = models.CharField(max_length=50)
-    age                = models.CharField(max_length=3)
+    job                 = models.CharField(max_length=10)
+    age                 = models.CharField(max_length=3)
+    phone               = models.CharField(max_length=25)
+    personality         = models.CharField(max_length=50, null=True, choices=PERSONALITY)
+    salary              = models.CharField(max_length=50)
+    gender              = models.CharField(max_length=50)
+    experience          = models.BooleanField(null=True)
+    smoker              = models.CharField(max_length=10, choices=SMOKER, default='No')
     email               = models.EmailField(max_length=50)
     message             = models.TextField()
     created_at          = models.DateTimeField(auto_now_add=True)
+    situation           = models.CharField(max_length=50, null=True, choices=SITUATION, default='pending')
+    # Capitalize (F-name and L-name)
+    def clean(self):
+        self.firstname  =self.firstname.capitalize()
+        self.lastname   =self.lastname.capitalize()
 
     def __str__(self):
         return self.firstname

@@ -3,6 +3,14 @@ from django import forms
 from .models import Candidate
 from django.core.validators import RegexValidator
 
+# Every letters to LowerCase
+class Lowercase(forms.CharField):
+    def to_python(self, value):
+        return value.lower()
+# Every letters to UpperCase
+class Uppercase(forms.CharField):
+    def to_python(self, value):
+        return value.upper()
 
 class CandidateForm(forms.ModelForm):
     # validations
@@ -20,7 +28,13 @@ class CandidateForm(forms.ModelForm):
         message     ="only letters is allowed !")], 
         widget      =forms.TextInput(attrs={'placeholder':'Last name'})
         )
-    email           = forms.EmailField(
+    job           = Uppercase(
+        label       ='Job Code', max_length=7, 
+        min_length  =7,
+        
+        widget      =forms.TextInput(attrs={'placeholder':'Example FR-221'})
+        )
+    email           = Lowercase(
         label       ='Email address', max_length=50, 
         min_length  =7,
         validators  =[RegexValidator(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$', 
@@ -29,7 +43,7 @@ class CandidateForm(forms.ModelForm):
         )
     age           = forms.CharField(
         label       ='Your age', max_length=50, 
-        min_length  =7,
+        min_length  =1,
         validators  =[RegexValidator(r'^[0-9]*$', 
         message     ="only number is allowd !")], 
         widget      =forms.TextInput(attrs={'placeholder':'Your age'})
@@ -37,17 +51,59 @@ class CandidateForm(forms.ModelForm):
     
     class Meta:
         model       = Candidate
-        fields      = '__all__'
+        # fields      = '__all__'
         # fields      = ['firstname','lastname','age','email','message']
-        # exclude      = ['firstname','lastname','age','email','message']
+        exclude      = ['situation','created-at']
 
-        # our widget
-        Widgets = {
-            'phone': forms.TextInput(
+        SALARY   = (
+            ('','salary expectation (month)'),
+            ('Between ($3000 and $4000 )','Between ($3000 and $4000 )'),
+            ('Between ($4000 and $5000 )','Between ($4000 and $5000 )'),
+            ('Between ($5000 and $7000 )','Between ($5000 and $7000 )'),
+            ('Between ($7000 and $10000 )','Between ($7000 and $10000 )')
+        )
+
+        # Method 2
+        GENDER = [('M','Male'),('F','Female')]
+
+        # Method 2
+        SMOKER = [('1','Yes'),('2','No')]
+        # OUR WIDGETS
+
+        widgets = {
+            # Phone
+            'Phone': forms.TextInput(
                 attrs={
-                'style':'font-size: 13px',
+                'style':'font-size: 1rem',
                 'placeholder':'phone',
-                'data-mask':'(000) 0000-0000'
+                'data-mask':'(00) 00000-0000'
                 }
-            )
+            ),
+
+            # salary
+            'salary': forms.Select(
+                choices=SALARY,
+                attrs={
+                'class':'form-control', # Bootstrap inside the forms.py
+                
+                }
+            ),
+
+            # gender
+            'gender': forms.RadioSelect(
+                choices=GENDER,
+                attrs={
+                'class':'btn-check', # Bootstrap inside the forms.py
+                
+                }
+            ),
+
+             # smoker
+            'smoker': forms.RadioSelect(
+                choices=SMOKER,
+                attrs={
+                'class':'btn-check', # Bootstrap inside the forms.py
+                
+                }
+            ),
         }
