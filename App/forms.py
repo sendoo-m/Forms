@@ -1,4 +1,3 @@
-from tkinter import Widget
 from django import forms
 from .models import Candidate
 from django.core.validators import RegexValidator
@@ -41,6 +40,7 @@ class CandidateForm(forms.ModelForm):
         message     ="Put a valid email address !")], 
         widget      =forms.TextInput(attrs={'placeholder':'e-mail address'})
         )
+
     age           = forms.CharField(
         label       ='Your age', max_length=50, 
         min_length  =1,
@@ -49,6 +49,15 @@ class CandidateForm(forms.ModelForm):
         widget      =forms.TextInput(attrs={'placeholder':'Your age'})
         )
     
+    experience     = forms.BooleanField(label = 'I Have experience', required=False,
+       
+    )
+
+    message        = forms.CharField(
+        label       ='about You', min_length=10, max_length=1000, required=False,
+        widget      =forms.Textarea(attrs={'placeholder':'Talk a littel about you', 'rows':10})
+    )
+
     class Meta:
         model       = Candidate
         # fields      = '__all__'
@@ -107,3 +116,31 @@ class CandidateForm(forms.ModelForm):
                 }
             ),
         }
+
+    # SUPER FUNCTION
+
+    # def __init__(self, *args, **kwargs):
+    #     super(CandidateForm, self).__init__(*args, **kwargs)
+
+        # ============ CONTROL PANAL ( Optiona method to control) ============|
+        # input requiered 
+        # self.fields['experience'].required = True
+
+        # input Disabled 
+        # self.fields['experience'].disabled = True
+        # ============ SELECT Optiona  ============|
+        # self.fields["personality"].choices = [('','select a personality'),] + list(self.fields["personality"].choices)[1:]
+
+        # ============ WIDGET CONTROL  ============|
+        # self.fields['phone'].widget.attrs.update({'style':'font-size: 18px', 'placeholder':'No Phone', 'data-mask': '(00) 00-000'})
+
+        # ============ READONLY / DISAPER By Loop CONTROL  ============|
+        # ReadOnly
+        # readonly = ['firstname', 'lastname']
+        # for field in readonly:
+        #     self.fields[field].widget.attrs['readonly'] = 'true'
+
+        # ReadOnly
+        # disabled = ['personality', 'age','salary','gender']
+        # for field in disabled:
+        #     self.fields[field].widget.attrs['disabled'] = 'true'

@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Candidate
+from .forms import CandidateForm
 from django.utils.html import format_html
 
 
@@ -7,6 +8,8 @@ from django.utils.html import format_html
 admin.site.site_header = 'LYS Form v 22.1.0 system Admin'
 
 class CandidateAdmin(admin.ModelAdmin):
+    radio_fields    = {"smoker": admin.HORIZONTAL} # to convert in admin panel to horizontal
+    form            = CandidateForm
     list_display    = ['firstname','lastname','email','job','situation','created_at','status','_']
     search_fields   = ['firstname','lastname','email','situation','age']
     list_filter     = ['situation','firstname','age']
@@ -17,7 +20,7 @@ class CandidateAdmin(admin.ModelAdmin):
     def _(self, obj):
         if obj.situation == 'Approved':
             return True
-        elif obj.situation == 'pending':
+        elif obj.situation == 'Pending':
             return None
         else:
             return False
@@ -28,7 +31,7 @@ class CandidateAdmin(admin.ModelAdmin):
     def status(self, obj):
         if obj.situation == 'Approved':
             color = '#28a745'
-        elif obj.situation == 'pending':
+        elif obj.situation == 'Pending':
             color = '#fea95e'
         else:
             color = 'red'
