@@ -33,6 +33,8 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'jazzmin',
+    # 'jet.dashboard',
+    # 'jet',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'App',
+    'multiselectfield',
+    # 'django_cleanup',
     'crispy_forms',
     'crispy_bootstrap5',
 ]
@@ -124,13 +128,49 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join( BASE_DIR, '/static')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static/')]
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join( BASE_DIR / 'media')
+STATIC_URL          = '/static/'
+# STATIC_ROOT       = os.path.join( BASE_DIR, '/static')
+STATICFILES_DIRS    = [os.path.join(BASE_DIR, 'static/')]
+MEDIA_URL           = '/media/'
+MEDIA_ROOT          = os.path.join( BASE_DIR / 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Django JET SETTINGS
+
+JET_THEMES = [
+    {
+        'theme': 'default', # theme folder name
+        'color': '#47bac1', # color of the theme's button in user menu
+        'title': 'Default' # theme title
+    },
+    {
+        'theme': 'green',
+        'color': '#44b78b',
+        'title': 'Green'
+    },
+    {
+        'theme': 'light-green',
+        'color': '#2faa60',
+        'title': 'Light Green'
+    },
+    {
+        'theme': 'light-violet',
+        'color': '#a464c4',
+        'title': 'Light Violet'
+    },
+    {
+        'theme': 'light-blue',
+        'color': '#5EADDE',
+        'title': 'Light Blue'
+    },
+    {
+        'theme': 'light-gray',
+        'color': '#222',
+        'title': 'Light Gray'
+    }
+]

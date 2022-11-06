@@ -10,6 +10,8 @@ admin.site.site_header = 'LYS Form v 22.1.0 system Admin'
 class CandidateAdmin(admin.ModelAdmin):
     radio_fields    = {"smoker": admin.HORIZONTAL} # to convert in admin panel to horizontal
     form            = CandidateForm
+    exclude         = ['status'] # لإظهار الحالة والتحكم فيها
+    # readonly_fields = ['firstname','lastname','email','job']  # لجعل الحقول للقراءة فقط  
     list_display    = ['firstname','lastname','email','job','situation','created_at','status','_']
     search_fields   = ['firstname','lastname','email','situation','age']
     list_filter     = ['situation','firstname','age']
