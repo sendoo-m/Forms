@@ -11,11 +11,19 @@ class CandidateAdmin(admin.ModelAdmin):
     radio_fields    = {"smoker": admin.HORIZONTAL} # to convert in admin panel to horizontal
     form            = CandidateForm
     exclude         = ['status'] # لإظهار الحالة والتحكم فيها
-    # readonly_fields = ['firstname','lastname','email','job']  # لجعل الحقول للقراءة فقط  
-    list_display    = ['firstname','lastname','email','job','situation','created_at','status','_']
+    readonly_fields = ['firstname','lastname','email','job','personality','phone','age','salary','gender','experience','smoker','message','file','frameworks','languages','databases','libraries','mobile','others']# لجعل الحقول للقراءة فقط  
+    list_display    = ['name','email','job','situation','created_at','status','_']
     search_fields   = ['firstname','lastname','email','situation','age']
     list_filter     = ['situation','firstname','age']
     list_per_page   = 10
+
+    #  Function to Hide F-name and L-name (when clicking over the candidiate -Rows)
+    def get_fields(self, request, obj = None):
+        fields  =  super().get_fields(request, obj)
+        if obj:
+            fields.remove('firstname')
+            fields.remove('lastname')
+        return fields
 
     # Function to change the Icon
 

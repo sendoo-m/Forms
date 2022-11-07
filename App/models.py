@@ -111,3 +111,13 @@ class Candidate(models.Model):
     def clean(self):
         self.firstname  =self.firstname.capitalize()        # to write all text reformat capitalize
         self.lastname   =self.lastname.capitalize()         # to write all text reformat capitalize
+
+    # Concatenate F-name and L-name (Admin Table)
+    # جمع عمودين بالادمن مثل الاسم الاول والاخير ثم يتم ازالة الاسم الاول والاخير من ملف الادمن list
+
+    def name(obj):
+        return "%s %s" %(obj.firstname, obj.lastname)
+
+     # Concatenate F-name and L-name when click over name in admin لإظهار الاسم بالكامل
+    def __str__(self):
+        return self.firstname + ' ' + self.lastname

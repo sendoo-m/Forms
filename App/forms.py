@@ -1,6 +1,8 @@
+import email
 from django import forms
 from .models import Candidate
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator # لعمل صلاحيات خاصة على الحقول 
+from django.core.exceptions import ValidationError # مستخدم في داله عدم تكرار المدخلات
 
 # Every letters to LowerCase بديل ليها css تم كتابته بالاسفل ==============
 class Lowercase(forms.CharField):
@@ -18,7 +20,8 @@ class CandidateForm(forms.ModelForm):
         label       ='First Name',max_length=50, 
         min_length  =3 ,
         validators  =[RegexValidator(r'^[a-zA-ZÀ-ÿ\s]*$', 
-        message     ="only letters is allowed !")], 
+        message     ="only letters is allowed !")],
+        error_messages={'required':'انت اهبل ياض الاسم غلط'}, 
         widget      =forms.TextInput(attrs={
             'placeholder':'First name',
             'style': 'font-size: 13px; text-transform: capitalize'
@@ -39,8 +42,8 @@ class CandidateForm(forms.ModelForm):
 
     # Job uppercase
     job           = Uppercase(
-        label       ='Job Code', max_length=7, 
-        min_length  =7,
+        label       ='Job Code', max_length=6, 
+        min_length  =6,
         widget      =forms.TextInput(attrs={
             'placeholder':'Example FR-221',
                         'style': 'font-size: 13px; text-transform: uppercase'
@@ -76,7 +79,8 @@ class CandidateForm(forms.ModelForm):
         label       ='phone', max_length=11, 
         min_length  =11,
         validators  =[RegexValidator(r'^[0-9]*$', 
-        message     ="only number is allowd !")], 
+        message     ="only number is allowd !")],
+        error_messages={'required':'الرقم غلط يا معلم'}, 
         widget      =forms.TextInput(attrs={
             'placeholder':'Put a phone',
             'data-mask':'(00) 00000-0000',
@@ -199,6 +203,9 @@ class CandidateForm(forms.ModelForm):
         #  5- WIDGET inside/outside
         # self.fields['phone'].widget.attrs.update({'style':'font-size: 18px', 'placeholder':'No Phone', 'data-mask': '(00) 00-000'})
 
+        # 6- Duplicated
+
+
         #  READONLY / DISAPER By Loop CONTROL
         # ReadOnly
         # readonly = ['firstname', 'lastname']
@@ -209,3 +216,77 @@ class CandidateForm(forms.ModelForm):
         # disabled = ['personality', 'age','salary','gender']
         # for field in disabled:
         #     self.fields[field].widget.attrs['disabled'] = 'true'
+    # ================= End // Supper funcations ================= #
+
+    # function to prevent Duplicated Enteries
+
+    # method (1) Loop For
+
+# dont register duplecate email
+#     def clean_email(self):
+#         email = self.cleaned_data.get('email')
+#         for obj in Candidate.objects.all():
+#             if obj.email == email:
+#                 raise forms.ValidationError('Denied ! ' + email + ' is already Registered')
+#         return email
+
+# # dont register duplecate firstname
+#     def clean_firstname(self):
+#             firstname = self.cleaned_data.get('firstname')
+#             for obj in Candidate.objects.all():
+#                 if obj.firstname == firstname:
+#                     raise forms.ValidationError('Denied ! ' + firstname + ' is already Registered')
+#             return firstname
+
+# # dont register duplecate firstname
+#     def clean_firstname(self):
+#             firstname = self.cleaned_data.get('firstname')
+#             for obj in Candidate.objects.all():
+#                 if obj.firstname == firstname:
+#                     raise forms.ValidationError('Denied ! ' + firstname + ' is already Registered')
+#             return firstname
+
+# # dont register duplecate phone
+#     def clean_phone(self):
+#             phone = self.cleaned_data.get('phone')
+#             for obj in Candidate.objects.all():
+#                 if obj.phone == phone:
+#                     raise forms.ValidationError('Denied ! ' + phone + ' is already Registered')
+#             return phone
+    
+    # Method (2) If
+#######============ عدم تكرار في الحقول ============#########
+# # # dont register duplecate phone
+#     def clean_phone(self):
+#         phone = self.cleaned_data.get('phone')
+#         if Candidate.objects.filter(phone = phone).exists():
+#             raise forms.ValidationError('Denied ! {} is already Registered'.format(phone))
+#         return phone
+
+# # # dont register duplecate firstname
+#     def clean_firstname(self):
+#         firstname = self.cleaned_data.get('firstname')
+#         if Candidate.objects.filter(firstname = firstname).exists():
+#             raise forms.ValidationError('Denied ! {} is already Registered'.format(firstname))
+#         return firstname
+
+# # # dont register duplecate lastname
+#     def clean_lastname(self):
+#         lastname = self.cleaned_data.get('lastname')
+#         if Candidate.objects.filter(lastname = lastname).exists():
+#             raise forms.ValidationError('Denied ! {} is already Registered'.format(lastname))
+#         return lastname
+
+# # # dont register duplecate email
+#     def clean_email(self):
+#         email = self.cleaned_data.get('email')
+#         if Candidate.objects.filter(email = email).exists():
+#             raise forms.ValidationError('Denied ! {} is already Registered'.format(email))
+#         return email
+#######============ نهاية عدم تكرار في الحقول ============#########
+
+# ===================== Control Panel ===================== #
+
+        # self.fields['firstname'].error_message.update({
+        #     'required' : 'الاسم دا غلط يا معلم غير ياض'
+        # })
