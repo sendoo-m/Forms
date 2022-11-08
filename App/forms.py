@@ -79,8 +79,8 @@ class CandidateForm(forms.ModelForm):
         label       ='phone', max_length=11, 
         min_length  =11,
         validators  =[RegexValidator(r'^[0-9]*$', 
-        message     ="only number is allowd !")],
-        error_messages={'required':'الرقم غلط يا معلم'}, 
+        message     ="only number is allowd !")], # الرسالة عند كتابة رقم غير مطابق للشرط
+        # error_messages={'required':'الرقم غلط يا معلم'}, ## عدم وجود رقم تم كتابته 
         widget      =forms.TextInput(attrs={
             'placeholder':'Put a phone',
             'data-mask':'(00) 00000-0000',
@@ -183,39 +183,44 @@ class CandidateForm(forms.ModelForm):
         }
 
     # SUPER FUNCTION
-
+# دا بداية الدالة لكل الاوامر بالاسفل
     def __init__(self, *args, **kwargs):
         super(CandidateForm, self).__init__(*args, **kwargs)
 
         # ============ CONTROL PANAL ( Optiona method to control) ============|
-        # 1- input requiered 
+        # 1- input requiered # مطلوب الكتابة ولا يمكن الاستكمال بدونه
         # self.fields['experience'].required = True
 
-        # 2- input Disabled 
+        # 2- input Disabled # عدم السماح بالتسجيل والكتابة
         # self.fields['experience'].disabled = True
 
-        # 3- input ReadOnly 
+        # 3- input ReadOnly # لجعل الحقل للقراءة فقط
         # self.fields['email'].widget.attrs.update({'readonly':'readonly'})
 
-        # 4- SELECT Optiona
+        # 4- SELECT Optiona # يقوم بتقليل عدد الاختيارات عند استخدام 0 يظهر الكل عند استخدام 6 يقوم بالغاء الكل وعدم اظهارهم
         # self.fields["personality"].choices = [('','select a personality'),] + list(self.fields["personality"].choices)[1:]
 
         #  5- WIDGET inside/outside
-        # self.fields['phone'].widget.attrs.update({'style':'font-size: 18px', 'placeholder':'No Phone', 'data-mask': '(00) 00-000'})
-
-        # 6- Duplicated
+        # self.fields['phone'].widget.attrs.update({'style':'font-size: 18px', 'placeholder':'No Phone', 'data-mask': '(00) 00-00'})
 
 
-        #  READONLY / DISAPER By Loop CONTROL
+        #  READONLY / DISAPER By Loop CONTROL   ======== Method 2 ========
         # ReadOnly
         # readonly = ['firstname', 'lastname']
         # for field in readonly:
         #     self.fields[field].widget.attrs['readonly'] = 'true'
 
-        # ReadOnly
+        # Disabled                              ======== Method 2 ========
         # disabled = ['personality', 'age','salary','gender']
         # for field in disabled:
         #     self.fields[field].widget.attrs['disabled'] = 'true'
+
+        # Error Message                         ======== Method 2 ========
+        # تستخدم لوضع رساله خطاء لكل الحقول في حالة عدم وضع اى بيانات
+        # error_message  = ['firstname','lastname','phone','age','email','message','smoker','gender']
+        # for field in error_message:
+        #     self.fields[field].error_messages.update({'required': 'Mohamed Gamal Sendoo'})
+
     # ================= End // Supper funcations ================= #
 
     # function to prevent Duplicated Enteries
@@ -285,8 +290,12 @@ class CandidateForm(forms.ModelForm):
 #         return email
 #######============ نهاية عدم تكرار في الحقول ============#########
 
-# ===================== Control Panel ===================== #
+# ===================== Control Panel  ===================== #
+# رسالة تطلع لو مكتبش حاجة اصلا  دا باقي الجزء بالاعلي 
+        self.fields['firstname'].error_messages.update({
+            'required' : 'انت هتشتغلني حط اسم يا معلم'
+        })
 
-        # self.fields['firstname'].error_message.update({
-        #     'required' : 'الاسم دا غلط يا معلم غير ياض'
-        # })
+        self.fields['phone'].error_messages.update({
+                    'required' : 'مش واجب تسجل برقم ولا دي صفحة من الشارع يعني'
+                })
