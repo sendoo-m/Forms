@@ -62,7 +62,7 @@
 
     <form method="POST" enctype="multipart/form-data" class=" mt-3" autocomplete="off" novalidate>
         {% csrf_token %}
-        <!-- Card 1 -->
+        <!-- Card 1 personal-->
     <div class="card border-dark p-3">
         <span class="btn btn-secondary mb-4" style="cursor: default">
                 Fronted: FRA-22 &nbsp; |&nbsp; Backend: BKA-15 | &nbsp; Fullstack: FST-85 &nbsp;
@@ -72,7 +72,7 @@
             <div class="col-4">{{ form.lastname|as_crispy_field }}</div>
             <div class="col-4">{{ form.job|as_crispy_field }}</div>
             <div class="col-4">{{ form.email|as_crispy_field }}</div>
-            <div class="col-4">{{ form.age|as_crispy_field }}</div>
+            <div class="col-4">{{ form.birth|as_crispy_field }}</div>
             <div class="col-4">{{ form.phone|as_crispy_field }}</div>
             
             <div><hr style="border: 1px solid #007bff;"></div>
@@ -89,12 +89,12 @@
         </div>
         <div>{{ form.message|as_crispy_field }}</div>
         <div>{{ form.file|as_crispy_field }}</div>
+        <div>{{ form.image|as_crispy_field }}</div>
     </div>
     <br />
     <div class="card border-dark p-3">
-        <span class="btn btn-secondary mb-4" style="cursor: default">
-        Mark Your Skills
-        </span>
+        <!-- Card 2 Skills-->
+        <span class="btn btn-secondary mb-4" style="cursor: default">Your Skills</span>
         <div class="row">
             <div class="col-2">{{ form.frameworks|as_crispy_field }}</div>
             <div class="col-2">{{ form.languages|as_crispy_field }}</div>
@@ -103,8 +103,48 @@
             <div class="col-2">{{ form.mobile|as_crispy_field }}</div>
             <div class="col-2">{{ form.others|as_crispy_field }}</div>
         </div>
-        <div><hr style="border: 1px solid #007bff;"></div>
-        <button type="submit" class="btn btn-outline-primary mt-3" style="width: 90px">submit</button>
+    </div>
+        <!-- Card 3 Educational-->
+        <br />
+        <div class="card border-dark p-3">
+            <span class="btn btn-secondary mb-4" style="cursor: default">EDUCATIONAL</span>
+            <div class="row mt-1">
+                <div class="col-4">{{ form.institution|as_crispy_field }}</div>
+                <div class="col-4">{{ form.course|as_crispy_field }}</div>
+                <div class="col-2">{{ form.started_course|as_crispy_field }}</div>
+                <div class="col-2">{{ form.finished_course|as_crispy_field }}</div>
+            </div>
+            {{ form.about_course|as_crispy_field }}
+            {{ form.status_course|as_crispy_field }}
+            
+        </div>
+        <br />
+        <!-- Card 4 Professional-->
+        <div class="card border-dark p-3">
+            <span class="btn btn-secondary mb-4" style="cursor: default">PROFESSIONAL</span>
+            <div class="row mt-1">
+                <div class="col-4">{{ form.company|as_crispy_field }}</div>
+                <div class="col-4">{{ form.position|as_crispy_field }}</div>
+                <div class="col-2">{{ form.started_job|as_crispy_field }}</div>
+                <div class="col-2">{{ form.finished_job|as_crispy_field }}</div>
+            </div>
+            {{ form.about_job|as_crispy_field }}
+            <div><hr style="border: 1px solid #007bff; margin-top: 5px"></div>
+            <div class="row mt-1">
+                <div class="col-3">{{ form.employed|as_crispy_field }}</div>
+                <div class="col-3">{{ form.remote|as_crispy_field }}</div>
+                <div class="col-3">{{ form.travel|as_crispy_field }}</div>
+
+            </div>
+            <br />
+            
+            <div><hr style="border: 1px solid #007bff;"></div>
+        </div>
+        <!-- Buttons -->
+        <div>
+        <button type="submit" class="btn btn-primary mt-3" style="width: 90px">submit</button>
+        <a href="{% url 'home' %} " class="btn btn-dark mt-3" style="width: 90px">Reset</a>
+        </div>
     </div>
 
 </form>

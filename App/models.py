@@ -3,9 +3,10 @@ from random import choices
 from django.db import models
 from multiselectfield import MultiSelectField
 
+
 # Create your models here.
 SITUATION   = (
-    ('pending','pending'),
+    ('Pending','Pending'),
     ('Approved','Approved'),
     ('Disapproved','Disapproved')
 )
@@ -81,11 +82,20 @@ OTHERS = (
     ('GraphQL','GraphQL'),
     ('Others','Others')
 )
+
+STATUS_COURSE = (
+    ('','Select your status course'),
+    ("i' am studying","i' am studying"),
+    ('I took a break','I took a break'),
+    ('Complated','Complated')
+)
 class Candidate(models.Model):
+    # Personal Card (1)
     firstname           = models.CharField(max_length=50)
     lastname            = models.CharField(max_length=50)
     job                 = models.CharField(max_length=10)
-    age                 = models.CharField(max_length=3)
+    # age                 = models.CharField(max_length=3)
+    birth               = models.DateField(auto_now=False, auto_now_add=False, verbose_name='Birthday')
     phone               = models.CharField(max_length=15)
     personality         = models.CharField(max_length=50, null=True, choices=PERSONALITY)
     salary              = models.CharField(max_length=50)
@@ -94,16 +104,37 @@ class Candidate(models.Model):
     smoker              = models.CharField(max_length=10, choices=SMOKER, default='No')
     email               = models.EmailField(max_length=50)
     message             = models.TextField()
-    file                = models.FileField()
+    file                = models.FileField(upload_to='resume', blank=True, verbose_name='Resume')
+    image               = models.ImageField(upload_to='photo', blank=True, verbose_name='Photo')
     created_at          = models.DateTimeField(auto_now_add=True)
-    situation           = models.CharField(max_length=50, null=True, choices=SITUATION, default='pending')
-    # Multiple Check 
+    situation           = models.CharField(max_length=50, null=True, choices=SITUATION, default='Pending')
+    company_note        = models.TextField(blank=True)
+    # Skill Card(2)  
     frameworks          = MultiSelectField(choices=FRAMEWORKS, default="")
     languages           = MultiSelectField(choices=LANGUAGES, default="")
     databases           = MultiSelectField(choices=DATABASES, default="")
     libraries           = MultiSelectField(choices=LIBRARIES, default="")
     mobile              = MultiSelectField(choices=MOBILE, default="")
     others              = MultiSelectField(choices=OTHERS, default="")
+    # Educational Card(3)
+    institution         = models.CharField(max_length=50)
+    course              = models.CharField(max_length=50)
+    started_course      = models.DateField(auto_now=False, auto_now_add=False)
+    finished_course     = models.DateField(auto_now=False, auto_now_add=False)
+    about_course        = models.TextField()
+    status_course       = models.CharField(max_length=50, null=True, choices=STATUS_COURSE)
+
+    # Professional Card(4) 
+
+    company             = models.CharField(max_length=50)
+    position            = models.CharField(max_length=50)
+    started_job         = models.DateField(auto_now=False, auto_now_add=False)
+    finished_job        = models.DateField(auto_now=False, auto_now_add=False)
+    about_job           = models.TextField()
+    employed            = models.BooleanField(null=True, verbose_name='I am employed')
+    remote              = models.BooleanField(null=True, verbose_name='I agree to work remotly')
+    travel              = models.BooleanField(null=True, verbose_name="I'm availbale for travel")
+
     def __str__(self):
         return self.firstname
 

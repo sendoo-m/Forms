@@ -63,16 +63,16 @@ class CandidateForm(forms.ModelForm):
         )
 
     #  Age Number only
-    age           = forms.CharField(
-        label       ='Your age', max_length=50, 
-        min_length  =1,
-        validators  =[RegexValidator(r'^[0-9]*$', 
-        message     ="only number is allowd !")], 
-        widget      =forms.TextInput(attrs={
-            'placeholder':'Your age',
-            'style': 'font-size: 13px'
-            })
-        )
+    # age           = forms.CharField(
+    #     label       ='Your age', max_length=50, 
+    #     min_length  =1,
+    #     validators  =[RegexValidator(r'^[0-9]*$', 
+    #     message     ="only number is allowd !")], 
+    #     widget      =forms.TextInput(attrs={
+    #         'placeholder':'Your age',
+    #         'style': 'font-size: 13px'
+    #         })
+    #     )
 
     #  Phone Number only
     phone           = forms.CharField(
@@ -96,29 +96,122 @@ class CandidateForm(forms.ModelForm):
 
     # Message
     message        = forms.CharField(
-        label       ='about You', min_length=10, max_length=1000, required=False,
+        label       ='about You', min_length=10, max_length=1000,
         widget      =forms.Textarea(attrs={
             'placeholder':'Talk a littel about you', 
-            'rows':10,
+            'rows':6,
             'style': 'font-size: 13px'
             })
     )
 
     # File Upload 
     file           = forms.FileField(
-        required    = True,
+        label       = 'Resume',
         widget      = forms.ClearableFileInput(
             attrs   = {
-                'style':'font-size: 13px'
+                'style':'font-size: 13px',
+                'accept':'application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             }
         )
     )
+
+    # Image Upload 
+    image           = forms.FileField(
+        label       = 'Photo',
+        widget      = forms.ClearableFileInput(
+            attrs   = {
+                'style':'font-size: 13px',
+                'accept':'image/png, image/jpeg',
+            }
+        )
+    )
+
+    # Institution
+    institution     = forms.CharField(
+        label       = 'institution', 
+        max_length  = 50, 
+        min_length  = 3,
+        # error_messages={'required':'الرقم غلط يا معلم'}, ## عدم وجود رقم تم كتابته 
+        widget      = forms.TextInput(
+            attrs   = {
+            'style':'font-size: 13px',
+            'placeholder':'Institution name',
+    })
+    )
+
+    # College course
+    course     = forms.CharField(
+        label       = 'course', 
+        max_length  = 50, 
+        min_length  = 3,
+        widget      = forms.TextInput(
+            attrs   = {
+            'style':'font-size: 13px',
+            'placeholder':'Your college course',
+    })
+    )
+
+    # Company
+    company         = forms.CharField(
+        label       = 'Last company', 
+        max_length  = 50, 
+        min_length  = 3,
+        widget      = forms.TextInput(
+            attrs   = {
+            'style':'font-size: 13px',
+            'placeholder':'Company name',
+    })
+    )
+
+    # position
+    position         = forms.CharField(
+        max_length  = 50, 
+        min_length  = 3,
+        widget      = forms.TextInput(
+            attrs   = {
+            'style':'font-size: 13px',
+            'placeholder':'Your occupation',
+    })
+    )
+
+    # About college Course
+    about_course    = forms.CharField(
+        label       ='about Your college course', min_length=10, max_length=1000,
+        widget      =forms.Textarea(attrs={
+            'placeholder':'Tell us about college course ...', 
+            'rows':7,
+            'style': 'font-size: 13px'
+            })
+    )
+
+    # About Job
+    about_job       = forms.CharField(
+        label       ='about Your job', min_length=10, max_length=1000,
+        widget      =forms.Textarea(attrs={
+            'placeholder':'Tell us alittle about what you did at the company job ...', 
+            'rows':7,
+            'style': 'font-size: 13px'
+            })
+    )
+
+    employed        = forms.BooleanField(label='I am employed', required=False)
+    remote          = forms.BooleanField(label='I agree to work remotly', required=False)
+    travel        = forms.BooleanField(label="I'm available for travel ", required=False)
+
 
     class Meta:
         model       = Candidate
         # fields      = '__all__'
         # fields      = ['firstname','lastname','age','email','message']
-        exclude      = ['situation','created-at']
+        exclude     = ['situation','created-at']
+        labels      = {
+            'gender':'Your Gender',
+            'smoker': 'Do you smoker?',
+            'started_course':'Started',
+            'finished_course':'Finished',
+            'started_job':'Started',
+            'finished_job':'Finished',
+        }
 
         SALARY   = (
             ('','salary expectation (month)'),
@@ -136,7 +229,61 @@ class CandidateForm(forms.ModelForm):
         # OUR WIDGETS
 
         widgets = {
-            
+            # Birthday
+            'birth': forms.DateInput(
+                attrs={
+                'style': 'font-size: 13px; cursor: pointer',
+                'type': 'date',
+                'onkeydown':'return false', # Block typing inside the input
+                'min':'1950-01-01',
+                'max':'2030-01-01',
+                }
+            ),
+
+            # Start course
+            'started_course': forms.DateInput(
+                attrs={
+                'style': 'font-size: 13px; cursor: pointer',
+                'type': 'date',
+                'onkeydown':'return false', # Block typing inside the input
+                'min':'1950-01-01',
+                'max':'2030-01-01',
+                }
+            ),
+
+            # finish course
+            'finished_course': forms.DateInput(
+                attrs={
+                'style': 'font-size: 13px; cursor: pointer',
+                'type': 'date',
+                'onkeydown':'return false', # Block typing inside the input
+                'min':'1950-01-01',
+                'max':'2030-01-01',
+                }
+            ),
+
+            # Start job
+            'started_job': forms.DateInput(
+                attrs={
+                'style': 'font-size: 13px; cursor: pointer',
+                'type': 'date',
+                'onkeydown':'return false', # Block typing inside the input
+                'min':'1950-01-01',
+                'max':'2030-01-01',
+                }
+            ),
+
+            # finish job
+            'finished_job': forms.DateInput(
+                attrs={
+                'style': 'font-size: 13px; cursor: pointer',
+                'type': 'date',
+                'onkeydown':'return false', # Block typing inside the input
+                'min':'1950-01-01',
+                'max':'2030-01-01',
+                }
+            ),
+
             # Phone
             # 'Phone': forms.TextInput(
             #     attrs={
@@ -184,8 +331,8 @@ class CandidateForm(forms.ModelForm):
 
     # SUPER FUNCTION
 # دا بداية الدالة لكل الاوامر بالاسفل
-    def __init__(self, *args, **kwargs):
-        super(CandidateForm, self).__init__(*args, **kwargs)
+def __init__(self, *args, **kwargs):
+    super(CandidateForm, self).__init__(*args, **kwargs)
 
         # ============ CONTROL PANAL ( Optiona method to control) ============|
         # 1- input requiered # مطلوب الكتابة ولا يمكن الاستكمال بدونه
@@ -292,10 +439,10 @@ class CandidateForm(forms.ModelForm):
 
 # ===================== Control Panel  ===================== #
 # رسالة تطلع لو مكتبش حاجة اصلا  دا باقي الجزء بالاعلي 
-        self.fields['firstname'].error_messages.update({
-            'required' : 'انت هتشتغلني حط اسم يا معلم'
-        })
+    self.fields['firstname'].error_messages.update({
+        'required' : 'انت هتشتغلني حط اسم يا معلم'
+    })
 
-        self.fields['phone'].error_messages.update({
-                    'required' : 'مش واجب تسجل برقم ولا دي صفحة من الشارع يعني'
-                })
+    self.fields['phone'].error_messages.update({
+        'required' : 'مش واجب تسجل برقم ولا دي صفحة من الشارع يعني'
+    })

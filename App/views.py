@@ -25,32 +25,32 @@ def home(request):
             }
         return render(request, "home.html", context)
 
-#######============ عدم تكرار في الحقول ============#########
-# # dont register duplecate phone
-    def clean_phone(self):
-        phone = self.cleaned_data.get('phone')
-        if Candidate.objects.filter(phone = phone).exists():
-            raise forms.ValidationError('Denied ! {} is already Registered'.format(phone))
-        return phone
+# #######============ عدم تكرار في الحقول ============#########
+# # # dont register duplecate phone
+#     def clean_phone(self):
+#         phone = self.cleaned_data.get('phone')
+#         if Candidate.objects.filter(phone = phone).exists():
+#             raise forms.ValidationError('Denied ! {} is already Registered'.format(phone))
+#         return phone
 
-# # dont register duplecate firstname
-    def clean_firstname(self):
-        firstname = self.cleaned_data.get('firstname')
-        if Candidate.objects.filter(firstname = firstname).exists():
-            raise forms.ValidationError('Denied ! {} is already Registered'.format(firstname))
-        return firstname
+# # # dont register duplecate firstname
+#     def clean_firstname(self):
+#         firstname = self.cleaned_data.get('firstname')
+#         if Candidate.objects.filter(firstname = firstname).exists():
+#             raise forms.ValidationError('Denied ! {} is already Registered'.format(firstname))
+#         return firstname
 
-# # dont register duplecate lastname
-    def clean_lastname(self):
-        lastname = self.cleaned_data.get('lastname')
-        if Candidate.objects.filter(lastname = lastname).exists():
-            raise forms.ValidationError('Denied ! {} is already Registered'.format(lastname))
-        return lastname
+# # # dont register duplecate lastname
+#     def clean_lastname(self):
+#         lastname = self.cleaned_data.get('lastname')
+#         if Candidate.objects.filter(lastname = lastname).exists():
+#             raise forms.ValidationError('Denied ! {} is already Registered'.format(lastname))
+#         return lastname
 
-# # dont register duplecate email
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        if Candidate.objects.filter(email = email).exists():
-            raise forms.ValidationError('Denied ! {} is already Registered'.format(email))
-        return email
-#######============ نهاية عدم تكرار في الحقول ============#########
+# # # dont register duplecate email
+#     def clean_email(self):
+#         email = self.cleaned_data.get('email')
+#         if Candidate.objects.filter(email = email).exists():
+#             raise forms.ValidationError('Denied ! {} is already Registered'.format(email))
+#         return email
+#######============ نهاية عدم تكرار في الحقول ============######### 
