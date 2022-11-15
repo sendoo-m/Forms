@@ -1,6 +1,8 @@
+import datetime
+from datetime import date
 import email
 from django import forms
-from .models import Candidate
+from .models import Candidate, SMOKER
 from django.core.validators import RegexValidator # لعمل صلاحيات خاصة على الحقول 
 from django.core.exceptions import ValidationError # مستخدم في داله عدم تكرار المدخلات
 
@@ -46,7 +48,8 @@ class CandidateForm(forms.ModelForm):
         min_length  =6,
         widget      =forms.TextInput(attrs={
             'placeholder':'Example FR-221',
-                        'style': 'font-size: 13px; text-transform: uppercase'
+            'style': 'font-size: 13px; text-transform: uppercase',
+            'data-mask': 'AA-000',
             })
         )
 
@@ -58,7 +61,8 @@ class CandidateForm(forms.ModelForm):
         message     ="Put a valid email address !")], 
         widget      =forms.TextInput(attrs={
             'placeholder':'e-mail address',
-            'style': 'font-size: 13px; text-transform: lowercase'
+            'style': 'font-size: 13px; text-transform: lowercase',
+            # 'autocomplete':'off',
             })
         )
 
@@ -70,7 +74,8 @@ class CandidateForm(forms.ModelForm):
     #     message     ="only number is allowd !")], 
     #     widget      =forms.TextInput(attrs={
     #         'placeholder':'Your age',
-    #         'style': 'font-size: 13px'
+    #         'style': 'font-size: 13px',
+    #         'autocomplete':'off',
     #         })
     #     )
 
@@ -107,8 +112,7 @@ class CandidateForm(forms.ModelForm):
     # File Upload 
     file           = forms.FileField(
         label       = 'Resume',
-        widget      = forms.ClearableFileInput(
-            attrs   = {
+        widget      = forms.ClearableFileInput(attrs={
                 'style':'font-size: 13px',
                 'accept':'application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             }
@@ -188,7 +192,7 @@ class CandidateForm(forms.ModelForm):
     about_job       = forms.CharField(
         label       ='about Your job', min_length=10, max_length=1000,
         widget      =forms.Textarea(attrs={
-            'placeholder':'Tell us alittle about what you did at the company job ...', 
+            'placeholder':'Tell us alittle about what you did at the company...', 
             'rows':7,
             'style': 'font-size: 13px'
             })
@@ -196,7 +200,7 @@ class CandidateForm(forms.ModelForm):
 
     employed        = forms.BooleanField(label='I am employed', required=False)
     remote          = forms.BooleanField(label='I agree to work remotly', required=False)
-    travel        = forms.BooleanField(label="I'm available for travel ", required=False)
+    travel          = forms.BooleanField(label="I'm available for travel ", required=False)
 
 
     class Meta:
@@ -327,12 +331,18 @@ class CandidateForm(forms.ModelForm):
                 
                 }
             ),
+            'status_course' : forms.Select(
+                attrs={
+                'style': 'font-size: 13px' # Bootstrap inside the forms.py
+                
+                }
+            ),
         }
 
     # SUPER FUNCTION
-# دا بداية الدالة لكل الاوامر بالاسفل
-def __init__(self, *args, **kwargs):
-    super(CandidateForm, self).__init__(*args, **kwargs)
+    # دا بداية الدالة لكل الاوامر بالاسفل
+    def __init__(self, *args, **kwargs):
+        super(CandidateForm, self).__init__(*args, **kwargs)
 
         # ============ CONTROL PANAL ( Optiona method to control) ============|
         # 1- input requiered # مطلوب الكتابة ولا يمكن الاستكمال بدونه
@@ -368,81 +378,187 @@ def __init__(self, *args, **kwargs):
         # for field in error_message:
         #     self.fields[field].error_messages.update({'required': 'Mohamed Gamal Sendoo'})
 
+        # auto complete to cant click to choose
+        # auto_complete     = ['firstname', 'lastname', 'job', 'email', 'phone']
+        # for field in auto_complete:
+        #     self.fields[field].widget.attrs.update({'autocomplete':'off'})
+        
+        # Font Size = font size 15 work
+        # font_size     = ['firstname','lastname','job']
+        # for field in font_size:
+        #     self.fields[field].widget.attrs.update({'style':'font-size: 15px'})
     # ================= End // Supper funcations ================= #
-
-    # function to prevent Duplicated Enteries
-
+    # ================================ Function (Method Clean)
+    #
+    # 1- function to prevent Duplicated Enteries
     # method (1) Loop For
 
-# dont register duplecate email
-#     def clean_email(self):
-#         email = self.cleaned_data.get('email')
-#         for obj in Candidate.objects.all():
-#             if obj.email == email:
-#                 raise forms.ValidationError('Denied ! ' + email + ' is already Registered')
-#         return email
+    # dont register duplecate email
+    # def clean_email(self):
+    #     email = self.cleaned_data.get('email')
+    #     for obj in Candidate.objects.all():
+    #         if obj.email == email:
+    #             raise forms.ValidationError('Denied ! ' + email + ' is already Registered')
+    #     return email
 
-# # dont register duplecate firstname
-#     def clean_firstname(self):
-#             firstname = self.cleaned_data.get('firstname')
-#             for obj in Candidate.objects.all():
-#                 if obj.firstname == firstname:
-#                     raise forms.ValidationError('Denied ! ' + firstname + ' is already Registered')
-#             return firstname
+    # # dont register duplecate firstname
+    # def clean_firstname(self):
+    #     firstname = self.cleaned_data.get('firstname')
+    #     for obj in Candidate.objects.all():
+    #         if obj.firstname == firstname:
+    #             raise forms.ValidationError('Denied ! ' + firstname + ' is already Registered')
+    #     return firstname
 
-# # dont register duplecate firstname
-#     def clean_firstname(self):
-#             firstname = self.cleaned_data.get('firstname')
-#             for obj in Candidate.objects.all():
-#                 if obj.firstname == firstname:
-#                     raise forms.ValidationError('Denied ! ' + firstname + ' is already Registered')
-#             return firstname
+    # dont register duplecate lastname
+    # def clean_lastname(self):
+    #     lastname = self.cleaned_data.get('lastname')
+    #     for obj in Candidate.objects.all():
+    #         if obj.lastname == lastname:
+    #             raise forms.ValidationError('Denied ! ' + lastname + ' is already Registered')
+    #     return lastname
 
-# # dont register duplecate phone
-#     def clean_phone(self):
-#             phone = self.cleaned_data.get('phone')
-#             for obj in Candidate.objects.all():
-#                 if obj.phone == phone:
-#                     raise forms.ValidationError('Denied ! ' + phone + ' is already Registered')
-#             return phone
+    # dont register duplecate phone
+    # def clean_phone(self):
+    #     phone = self.cleaned_data.get('phone')
+    #     for obj in Candidate.objects.all():
+    #         if obj.phone == phone:
+    #             raise forms.ValidationError('Denied ! ' + phone + ' is already Registered')
+    #     return phone
     
-    # Method (2) If
-#######============ عدم تكرار في الحقول ============#########
-# # # dont register duplecate phone
-#     def clean_phone(self):
-#         phone = self.cleaned_data.get('phone')
-#         if Candidate.objects.filter(phone = phone).exists():
-#             raise forms.ValidationError('Denied ! {} is already Registered'.format(phone))
-#         return phone
+    # Method (2) (If sttement w/ filter)
+    #######============ عدم تكرار في الحقول ============#########
+    # dont register duplecate phone
+    # def clean_phone(self):
+    #     phone = self.cleaned_data.get('phone')
+    #     if Candidate.objects.filter(phone = phone).exists():
+    #         raise forms.ValidationError('Denied ! {} is already Registered'.format(phone))
+    #     return phone
 
-# # # dont register duplecate firstname
-#     def clean_firstname(self):
-#         firstname = self.cleaned_data.get('firstname')
-#         if Candidate.objects.filter(firstname = firstname).exists():
-#             raise forms.ValidationError('Denied ! {} is already Registered'.format(firstname))
-#         return firstname
+    # dont register duplecate firstname
+    # def clean_firstname(self):
+    #     firstname = self.cleaned_data.get('firstname')
+    #     if Candidate.objects.filter(firstname = firstname).exists():
+    #         raise forms.ValidationError('Denied ! {} is already Registered'.format(firstname))
+    #     return firstname
 
-# # # dont register duplecate lastname
-#     def clean_lastname(self):
-#         lastname = self.cleaned_data.get('lastname')
-#         if Candidate.objects.filter(lastname = lastname).exists():
-#             raise forms.ValidationError('Denied ! {} is already Registered'.format(lastname))
-#         return lastname
+    # dont register duplecate lastname
+    # def clean_lastname(self):
+    #     lastname = self.cleaned_data.get('lastname')
+    #     if Candidate.objects.filter(lastname = lastname).exists():
+    #         raise forms.ValidationError('Denied ! {} is already Registered'.format(lastname))
+    #     return lastname
 
-# # # dont register duplecate email
-#     def clean_email(self):
-#         email = self.cleaned_data.get('email')
-#         if Candidate.objects.filter(email = email).exists():
-#             raise forms.ValidationError('Denied ! {} is already Registered'.format(email))
-#         return email
+    # dont register duplecate email
+    # def clean_email(self):
+    #     email = self.cleaned_data.get('email')
+    #     if Candidate.objects.filter(email = email).exists():
+    #         raise forms.ValidationError('Denied ! {} is already Registered'.format(email))
+    #     return email
+
+    # 2- JOB CODE (job code validation)
+    def clean_job(self):
+        job = self.cleaned_data.get('job')
+        if job == 'FRA-22' or job == 'BKA-15' or job == 'FST-85':
+            return job
+        else:
+            raise forms.ValidationError('Denied ! This code is invalid.')
+
+    # 3 - AGE Range : 18-65
+    # def clean_birth(self):
+    #     birth = self.cleaned_data.get('birth')
+    #     if birth < '18' or birth > '65':
+    #         raise forms.ValidationError('Denied ! Age Must be between 18 and 65')
+    #     return birth
+
+    # 4- PHONE (prevent incomplete value)
+    def clean_phone(self):
+        phone = self.cleaned_data.get('phone')
+        if len(phone) != 11:
+            raise forms.ValidationError('Denied ! Phone field is incomplete.')
+        return phone
+
+    # 5- RESTRICTION (file extensions -Method 2 via function)
+    # def clean_file(self):
+    #     file            = self.cleaned_data['file']
+    #     content_type    = file.content_type
+    #     if content_type == 'application/pdf' or content_type == 'application/msword':
+    #         return file
+    #     else:
+    #         raise forms.ValidationError('Denied ! Only PDF - DOC - DOCX')
+
+    # Method 3
+    def clean_file(self):
+        # Get data
+        file    = self.cleaned_data.get('file', False)
+        # Variables
+        EXT     = ['pdf', 'doc', 'docx']
+        ext     = str(file).split('.')[-1]
+        type    = ext.lower()
+        # Statement
+        # a- Accept only pdf - doc - docx
+        if type not in EXT:
+            raise forms.ValidationError('Denied ! Only PDF - DOC - DOCX')
+        # Prevent upload more than 2 MP
+        if file.size > 2 * 1048476:
+            raise forms.ValidationError('Denied ! Maximum allowed is 2 MP')
+            return file
+
+    # 6- IMAGE (MAX upload 2 MP)
+    def clean_image(self):
+        image       = self.cleaned_data.get('image')
+        if image.size > 2 * 1048476:
+            raise forms.ValidationError('Denied ! Maximum allowed is 2 MP')
+        return image
+        
+    # 7- BirthDay (range: 18 and 65)
+    def clean_birth(self):
+        birth       = self.cleaned_data.get('birth')
+        # Variables
+        b           = birth
+        now         = date.today()
+        age         = (now.year - b.year) - ((now.month, now.day) < (b.month, b.day))
+        # Statements 
+        if age < 18 or age > 65:
+            raise forms.ValidationError('Denied ! Age Must be between 18 and 65')
+        return birth
+    
+    # 8- Prevent FUTURES dates (card 3 and 4)
+    # A) College
+    def clean_started_course(self):
+        started_course  = self.cleaned_data['started_course']
+        if started_course > datetime.date.today():
+            raise forms.ValidationError('Future dates is invalid.')
+        return started_course
+
+    def clean_finished_course(self):
+        finished_course  = self.cleaned_data['finished_course']
+        if finished_course > datetime.date.today():
+            raise forms.ValidationError('Future dates is invalid.')
+        return finished_course
+    
+    # B) Job
+    def clean_started_job(self):
+        started_job  = self.cleaned_data['started_job']
+        if started_job > datetime.date.today():
+            raise forms.ValidationError('Future dates is invalid.')
+        return started_job
+
+    def clean_finished_job(self):
+        finished_job  = self.cleaned_data['finished_job']
+        if finished_job > datetime.date.today():
+            raise forms.ValidationError('Future dates is invalid.')
+        return finished_job
+    
+
+
 #######============ نهاية عدم تكرار في الحقول ============#########
 
 # ===================== Control Panel  ===================== #
 # رسالة تطلع لو مكتبش حاجة اصلا  دا باقي الجزء بالاعلي 
-    self.fields['firstname'].error_messages.update({
-        'required' : 'انت هتشتغلني حط اسم يا معلم'
-    })
+        # self.fields['firstname'].error_messages.update({
+        #     'required' : 'انت هتشتغلني حط اسم يا معلم'
+        # })
 
-    self.fields['phone'].error_messages.update({
-        'required' : 'مش واجب تسجل برقم ولا دي صفحة من الشارع يعني'
-    })
+        # self.fields['phone'].error_messages.update({
+        #     'required' : 'مش واجب تسجل برقم ولا دي صفحة من الشارع يعني'
+        # })
