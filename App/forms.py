@@ -344,6 +344,11 @@ class CandidateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(CandidateForm, self).__init__(*args, **kwargs)
 
+        # Disable All inputs By: ID/PK
+        # instance    = getattr(self, 'instance', None)
+        # if instance and instance.pk:
+        #     self.fields['experience'].disabled = True
+
         # ============ CONTROL PANAL ( Optiona method to control) ============|
         # 1- input requiered # مطلوب الكتابة ولا يمكن الاستكمال بدونه
         # self.fields['experience'].required = True
@@ -361,32 +366,46 @@ class CandidateForm(forms.ModelForm):
         # self.fields['phone'].widget.attrs.update({'style':'font-size: 18px', 'placeholder':'No Phone', 'data-mask': '(00) 00-00'})
 
 
-        #  READONLY / DISAPER By Loop CONTROL   ======== Method 2 ========
+        #  1- READONLY / DISAPER By Loop CONTROL   ======== Method 2 ========
         # ReadOnly
         # readonly = ['firstname', 'lastname']
         # for field in readonly:
         #     self.fields[field].widget.attrs['readonly'] = 'true'
 
-        # Disabled                              ======== Method 2 ========
+        # 2- Disabled                              ======== Method 2 ========
         # disabled = ['personality', 'age','salary','gender']
         # for field in disabled:
         #     self.fields[field].widget.attrs['disabled'] = 'true'
 
-        # Error Message                         ======== Method 2 ========
+        # 3- Error Message                         ======== Method 2 ========
         # تستخدم لوضع رساله خطاء لكل الحقول في حالة عدم وضع اى بيانات
         # error_message  = ['firstname','lastname','phone','age','email','message','smoker','gender']
         # for field in error_message:
         #     self.fields[field].error_messages.update({'required': 'Mohamed Gamal Sendoo'})
 
-        # auto complete to cant click to choose
+        # 4- auto complete to cant click to choose
         # auto_complete     = ['firstname', 'lastname', 'job', 'email', 'phone']
         # for field in auto_complete:
         #     self.fields[field].widget.attrs.update({'autocomplete':'off'})
         
-        # Font Size = font size 15 work
+        # 5- Font Size = font size 15 work
         # font_size     = ['firstname','lastname','job']
         # for field in font_size:
         #     self.fields[field].widget.attrs.update({'style':'font-size: 15px'})
+
+        # 6- Disable All inputs By: ID/PK
+        # instance    = getattr(self, 'instance', None)
+        # array       = ['firstname','lastname','job','email','phone','personality','salary','birth','gender','experience',
+        #                 'smoker','message','frameworks','languages','databases','libraries','mobile','others','file','image','status_course',
+        #                 'started_course','finished_course','course','institution','about_course','started_job','finished_job','about_job',
+        #                 'company','position','employed','remote','travel']
+        # for field in array:
+        #     if instance and instance.pk:
+        #         self.fields[field].disabled = True
+        #         self.fields['file'].widget.attrs.update({'style': 'display: none'})
+        #         self.fields['image'].widget.attrs.update({'style': 'display: none'})
+                
+
     # ================= End // Supper funcations ================= #
     # ================================ Function (Method Clean)
     #

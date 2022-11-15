@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+<!-- {% load crispy_forms_tags %} -->
+
+<!-- Block Title -->
+{% block title %} All candidate {% endblock title %}
+
+<!-- Block Navbar -->
+{% block navbar %} bg-warning {% endblock navbar %}
+
+{% block nav-content %}
+<span class="text-dark"><i class="fas fa-cog"></i> &nbsp; &nbsp; ADMINISTARATION</span>
+{% endblock nav-content %}
+
+<!-- Page Contant -->
+{% block content %}
+
+
+<div class="container mt-3" style='width: 95%; font-size: 14px'>
+    <!-- Button -->
+    <a href="{% url 'logout' %}" class="btn btn-outline-danger mt-3 mb-3 my-btn">Log out</a>
+
+    <!-- Header (Title) -->
+    <h6 class="card p-2 bg-secondary text-light text-center mb-3">LIST OF CANDIDATE</h6>
+
+    <!-- Table -->
+    <table class="table table-bordered text-center">
+        <thead class="table-secondary">
+            <tr>
+                <th style="width: 30%">Name</th>
+                <th style="width: 20%">Email</th>
+                <th style="width: 23%">Phone</th>
+                <th style="width: 7%">Gender</th>
+                <th style="width: 15%">Smoker</th>
+                <th colspan="2" style="width: 5%">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in data_read %}
+            <tr>
+                <td>{{ data.firstname }} {{ data.lastname }}</td>
+                <td>{{ data.email }} </td>
+                <td>{{ data.phone }} </td>
+                <td>{{ data.gender }} </td>
+
+                {% if data.smoker == '1' %}
+                <td>Yes</td>
+                {% else %}
+                <td>No</td>
+                {% endif %}
+
+                <td class="bg-secondary">
+                    <a href="{% url 'candidate' data.id %} " class="btn btn-outline-secondary btn-sm text-light">
+                        <i class="fas fa-user-alt"></i>
+                    </a></td>
+                    {% empty %}
+                    <td colspan="6" class="text-danger"><strong>No records found</strong></td>
+            </tr>
+        </tbody>
+            {% endfor %}
+    </table>
+<!-- <h1 class="text-danger mt-5 "> Backend Page</h1> -->
+
+</div>
+{% endblock content %}

@@ -24,8 +24,8 @@ PERSONALITY   = (
 # )
 
 SMOKER   = (
-    ('1','Yes'),
-    ('2','No')
+    ('Yes','Yes'),
+    ('No','No')
 )
 
 # Multiple Check

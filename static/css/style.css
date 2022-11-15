@@ -1,4 +1,11 @@
-html {
+/* -------------------------
+#START CONFIGRATION
+------------------------- */
+
+html , body {
+    height: 100%;
+    margin: 0%;
+    max-width: 100%;
     font-family: sans-serif;
     line-height: 1.15;
     -webkit-text-size-adjust: 100%;
@@ -36,16 +43,38 @@ body {
     background-color: #fff;
 }
 
-
+/* -------------------------
+# Footer
+------------------------- */
 /* Keep the footer always down */
 
 
-/* .wrapper {
+.wrapper {
     min-height: 100%;
     margin-bottom: -50px;
 }
 
-#footer,
-.push {
+#footer, .push {
     height: 50px;
-} */
+}
+
+/* -------------------------
+# Other
+------------------------- */
+
+/* All Buttons (width) */
+
+.my-btn {
+    width: 90px;
+}
+
+/* Remove lines in all <a> Tages */
+
+a {
+    text-decoration: none !important;
+}
+/* upload field boxes file and image */
+
+.text-break, .input-group-text {
+    font-size: 13px !important;
+}

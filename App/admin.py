@@ -6,7 +6,10 @@ from import_export.admin import ImportExportModelAdmin
 
 
 # Register your models here.
+
+# Admin Panel 
 admin.site.site_header = 'LYS Form v 22.1.0 system Admin'
+admin.site.index_title = "Table of Candidate"
 
 class CandidateAdmin(ImportExportModelAdmin):  # ImportExportModelAdmin بديله عن   admin.ModelAdmin 
     radio_fields    = {"smoker": admin.HORIZONTAL} # to convert in admin panel to horizontal
@@ -17,7 +20,7 @@ class CandidateAdmin(ImportExportModelAdmin):  # ImportExportModelAdmin بديل
     list_filter     = ['situation','firstname']
     list_per_page   = 10
 
-    # ReadOnly Section 
+    # # ReadOnly Section تم استبداله بالداله الخاصة بغلق الكل من على اليوزر والادمن  views.py array and form
     readonly_fields = ['firstname','lastname','job','email','phone','personality','salary','birth','gender','experience',
     'smoker','message','frameworks','languages','databases','libraries','mobile','others','file','image','status_course',
     'started_course','finished_course','course','institution','about_course','started_job','finished_job','about_job',

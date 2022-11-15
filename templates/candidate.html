@@ -1,0 +1,17 @@
+{% extends 'register.html' %}
+
+<!-- Block Title -->
+{% block title %} Candidate {% endblock title %}
+
+<!-- Block Navbar -->
+
+{% block nav-content %}
+<i class="fas fa-user-alt"></i> &nbsp; &nbsp; Candidate
+{% endblock nav-content %}
+
+<!-- Buttons denied here -->
+{% block button %}
+
+<a href="{% url 'backend' %} " class="btn btn-secondary mt-4 mb-2 my-btn">Back</a>
+
+{% endblock button %}
