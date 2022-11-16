@@ -1,12 +1,20 @@
-{% extends 'register.html' %}
+{% extends 'base.html' %}
 
 <!-- Block Title -->
 {% block title %} Candidate {% endblock title %}
 
 <!-- Block Navbar -->
+{% block navbar %}
+    {% if candidate.gender == 'F' %}
+        bg-danger
+    {% else %}
+        bg-primary
+    {% endif %}
+{% endblock navbar %}
 
+<!-- Block Navbar Content -->
 {% block nav-content %}
-<i class="fas fa-user-alt"></i> &nbsp; &nbsp; Candidate
+<!-- <i class="fas fa-user-alt"></i> &nbsp; &nbsp; Candidate -->
 {% endblock nav-content %}
 
 <!-- Buttons denied here -->
@@ -15,3 +23,115 @@
 <a href="{% url 'backend' %} " class="btn btn-secondary mt-4 mb-2 my-btn">Back</a>
 
 {% endblock button %}
+<!-- Page Content -->
+{% block content %}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between">
+        <h6 class="mb-3">CANDIDATE : {{ candidate.id }}</h6>
+        <a class="btn {% if candidate.gender == 'F' %} btn-danger {% else %} btn-primary {% endif %} btn-sm border-ligth"
+        href="{{ candidate.file.url }}"
+        style="width: 150px;">Download CV</a>
+    </div>
+    <hr>
+    <div class="float-end" >
+        <img src="{{ candidate.image.url }}" class="img-fluid img-thumbnil" width="150" height="150">
+        <div class="text-center mt-2"style="font-size: 14px; " > {{ candidate.birth|timesince}} old</div>
+    </div>
+    <!-- Personal -->
+    <h6 class="text-primary mb-4 mt-4">PERSONAL</h6>
+
+    <!-- Statement to job code -->
+
+    {% if candidate.job == 'FRA-22' %}
+        <p><strong>Ocuppation:</strong>  Frontend</p>
+    {% elif candidate.job == 'BKA-15' %}
+        <p><strong>Ocuppation:</strong>  Backend</p>
+    {% else %}
+        <p><strong>Ocuppation:</strong>  Fullstack</p>
+    {% endif %}
+
+    <p><strong>Gender:</strong>  {{ candidate.gender }} </p>
+    <p><strong>Phone:</strong>  {{ candidate.phone }} </p>
+    <p><strong>E-mail:</strong>  {{ candidate.email }} </p>
+    <p><strong>Birth Date:</strong>  {{ candidate.birth }} </p>
+    <p><strong>Personality:</strong>  {{ candidate.personality }} </p>
+    <!-- Smoker Statement -->
+    {% if candidate.smoker == 'Yes' %}
+        <p><strong>Smoker:</strong>  (Yes)</p>
+    {% else %}
+        <p><strong>Smoker:</strong><span class="text-danger">  (No)</span></p>
+    {% endif %}
+
+    <!-- Experiance Statement -->
+    {% if candidate.experiance == True %}
+        <p><strong>Experiance:</strong><span class="text-primary">  (Yes)</span></p>
+    {% else %}
+        <p><strong>Experiance:</strong><span class="text-danger">  (No)</span></p>
+    {% endif %}
+
+    <p><strong>Salary Expectation :</strong>  {{ candidate.salary }} </p>
+    <p><strong>Presentation :</strong>  {{ candidate.message }} </p>
+    <hr>
+    <!-- SKILLS -->
+    <h6 class="text-primary mb-4 mt-4">SKILLS</h6>
+    <p><strong>Frameworks :</strong>  {{ candidate.frameworks }} </p>
+    <p><strong>Languages :</strong>  {{ candidate.languages }} </p>
+    <p><strong>Databases :</strong>  {{ candidate.databases }} </p>
+    <p><strong>Libraries :</strong>  {{ candidate.libraries }} </p>
+    <p><strong>Mobile :</strong>  {{ candidate.mobile }} </p>
+    <p><strong>Others :</strong>  {{ candidate.others }} </p>
+    <hr>
+    <!-- EDUCATIONAL -->
+    <h6 class="text-primary mb-4 mt-4">EDUCATIONAL</h6>
+    <p><strong>Institution :</strong>  {{ candidate.institution }} </p>
+    <p><strong>Course :</strong>  {{ candidate.course }} </p>
+    <p><strong>Started :</strong>  {{ candidate.started_course }} </p>
+    <p><strong>Finished :</strong>  {{ candidate.finished_course }} </p>
+
+    <!-- Status Course Statement -->
+    {% if candidate.status_course == "i' am studying" %}
+        <p><strong>Status Course:</strong><span class="text-primary">  "i' am studying"</span></p>
+    {% elif  candidate.status_course == 'I took a break' %}
+        <p><strong>Status Course:</strong><span class="text-danger">  'I took a break'</span></p>
+    {% else %}
+        <p><strong>Status Course:</strong><span class="text-success"> {{ candidate.status_course }}</span></p>
+    {% endif %}
+    <p><strong>About Course :</strong>  {{ candidate.about_course }} </p>
+
+    <hr>
+    <!-- EXPERIANCE -->
+    <h6 class="text-primary mb-4 mt-4">EXPERIANCE</h6>
+    <p><strong>company :</strong>  {{ candidate.company }} </p>
+    <p><strong>Position :</strong>  {{ candidate.position }} </p>
+    <p><strong>Started :</strong>  {{ candidate.started_job }} </p>
+    <p><strong>Finished :</strong>  {{ candidate.finished_job }} </p>
+    <p><strong>About job :</strong>  {{ candidate.about_job }} </p>
+
+    <hr>
+    <!-- NOTE -->
+    <h6 class="text-primary mb-4 mt-4">NOTE</h6>
+    <!-- Employed Statement -->
+    {% if candidate.employed == True %}
+        <p><strong>Employed:</strong><span class="text-primary">  (Yes)</span></p>
+    {% else %}
+        <p><strong>Employed:</strong><span class="text-danger">  (No)</span></p>
+    {% endif %}
+    <!-- Remotly Statement -->
+    {% if candidate.remotly == True %}
+        <p><strong>Remotly:</strong><span class="text-primary">  (Yes)</span></p>
+    {% else %}
+        <p><strong>Remotly:</strong><span class="text-danger">  (No)</span></p>
+    {% endif %}
+    <!-- Travel Statement -->
+    {% if candidate.travel == True %}
+        <p><strong>Travel:</strong><span class="text-primary">  (Yes)</span></p>
+    {% else %}
+        <p><strong>Travel:</strong><span class="text-danger">  (No)</span></p>
+    {% endif %}
+</div>
+<br>
+<br>
+<br>
+<br>
+{% endblock content %}
