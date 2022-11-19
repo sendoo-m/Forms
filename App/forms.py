@@ -114,7 +114,7 @@ class CandidateForm(forms.ModelForm):
         label       = 'Resume',
         widget      = forms.ClearableFileInput(attrs={
                 'style':'font-size: 13px',
-                'accept':'application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                # 'accept':'application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             }
         )
     )
@@ -497,30 +497,30 @@ class CandidateForm(forms.ModelForm):
         return phone
 
     # 5- RESTRICTION (file extensions -Method 2 via function)
-    # def clean_file(self):
-    #     file            = self.cleaned_data['file']
-    #     content_type    = file.content_type
-    #     if content_type == 'application/pdf' or content_type == 'application/msword':
-    #         return file
-    #     else:
-    #         raise forms.ValidationError('Denied ! Only PDF - DOC - DOCX')
+    def clean_file(self):
+        file            = self.cleaned_data['file']
+        content_type    = file.content_type
+        if content_type == 'application/pdf' or content_type == 'application/msword':
+            return file
+        else:
+            raise forms.ValidationError('Denied ! Only PDF - DOC - DOCX')
 
     # Method 3
-    def clean_file(self):
-        # Get data
-        file    = self.cleaned_data.get('file', False)
-        # Variables
-        EXT     = ['pdf', 'doc', 'docx']
-        ext     = str(file).split('.')[-1]
-        type    = ext.lower()
-        # Statement
-        # a- Accept only pdf - doc - docx
-        if type not in EXT:
-            raise forms.ValidationError('Denied ! Only PDF - DOC - DOCX')
-        # Prevent upload more than 2 MP
-        if file.size > 2 * 1048476:
-            raise forms.ValidationError('Denied ! Maximum allowed is 2 MP')
-            return file
+    # def clean_file(self):
+    #     # Get data
+    #     file    = self.cleaned_data.get('file', False)
+    #     # Variables
+    #     EXT     = ['pdf', 'doc', 'docx']
+    #     ext     = str(file).split('.')[-1]
+    #     type    = ext.lower()
+    #     # Statement
+    #     # a- Accept only pdf - doc - docx
+    #     if type not in EXT:
+    #         raise forms.ValidationError('Denied ! Only PDF - DOC - DOCX')
+    #     # Prevent upload more than 2 MP
+    #     if file.size > 2 * 1048476:
+    #         raise forms.ValidationError('Denied ! Maximum allowed is 2 MP')
+    #         return file
 
     # 6- IMAGE (MAX upload 2 MP)
     def clean_image(self):

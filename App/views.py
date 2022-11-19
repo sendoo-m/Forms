@@ -6,6 +6,11 @@ from .models import Candidate
 from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required # login required to access private pages.
 from django.views.decorators.cache import cache_control # Destory the section after log out.
+from django.core.paginator import Paginator
+from django.db.models import Q # for search
+# Concatenated F-name and L-name
+from django.db.models.functions import Concat # Concatenated
+from django.db.models import Value as P #(P=Plus)
 
 
 # ======================== FRONTEND ======================== |
@@ -72,8 +77,41 @@ def register(request):
 @login_required(login_url="login")
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def backend(request):
+    # Filter (individual)
+    # if request.method == 'POST':
+    #     job         = request.POST.get('job')
+    #     filter      = Candidate.objects.filter(job=job)
+    #     context     = {
+    #         "candidates" : filter
+    #     }
+    #     return render(request, 'backend.html', context)
+
+    # Global filter
+    if request.method == 'POST':
+        job         = request.POST.get('job')
+        gender      = request.POST.get('gender')
+        filter      = Candidate.objects.filter(Q(job=job) |Q(gender=gender))
+        context     = {
+            "candidates" : filter
+        }
+        return render(request, 'backend.html', context)
+
+    # Global Search
+    elif 'q' in request.GET:
+        q                   = request.GET['q']
+        all_candidate_list  = Candidate.objects.annotate(
+            name            = Concat('firstname', P(' '), 'lastname')).\
+            filter(Q(name__icontains=q) | Q(firstname__icontains=q) | Q(lastname__icontains=q) |
+            Q(email__icontains=q) | Q(email__icontains=q) | Q(phone__icontains=q)) # very important space in P('Space') and P capital
+    else:
+        all_candidate_list  = Candidate.objects.all().order_by('-created_at')
+        # Pagination
+    paginator           = Paginator(all_candidate_list, 3)
+    page                = request.GET.get('page')
+    all_candidate       = paginator.get_page(page)
+
     context     = {
-        'data_read':Candidate.objects.all()
+        'candidates':all_candidate
     } 
     return render(request, 'backend.html', context)
 
@@ -82,16 +120,4 @@ def backend(request):
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def candidate(request, id):
     candidate        = Candidate.objects.get(pk = id)
-    # form        = CandidateForm(instance = data)
-    # array       = ['firstname','lastname','job','email','phone','personality','salary','birth','gender','experience',
-    #                     'smoker','message','frameworks','languages','databases','libraries','mobile','others','file','image','status_course',
-    #                     'started_course','finished_course','course','institution','about_course','started_job','finished_job','about_job',
-    #                     'company','position','employed','remote','travel'] # لجعل الحقول قراءة فقط
-    # for field in array:
-    #     form.fields[field].disabled = True
-    #     form.fields['file'].widget.attrs.update({'style': 'display: none'})
-    #     form.fields['image'].widget.attrs.update({'style': 'display: none'})
-    context     = {
-        'candidate':candidate
-    }
-    return render(request, 'candidate.html', context)
+    return render(request, 'candidate.html', {'candidate': candidate})
